@@ -52,10 +52,11 @@ public class FrontPage extends Fragment {
     public void onStart() {
         super.onStart();
         FirebaseUser firebaseUser = authentication.getCurrentUser();
+        Menu nav_Menu = navigationView.getMenu();
 
         NavigationView navigationView = (NavigationView)getActivity().findViewById(R.id.nav_view);
         if(firebaseUser!=null){ // find if user is logged in set the title and replace sign in with logout
-            Menu nav_Menu = navigationView.getMenu();
+
             nav_Menu.findItem(R.id.login).setVisible(false);
             nav_Menu.findItem(R.id.signout).setVisible(true);
             dbReference.child("Users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
@@ -76,12 +77,10 @@ public class FrontPage extends Fragment {
                 }
             });
         }
-        authStateListener = new FirebaseAuth.AuthStateListener(){
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                // FirebaseUser
-            }
-        };
+        else{
+            nav_Menu.findItem(R.id.login).setVisible(true);
+            nav_Menu.findItem(R.id.signout).setVisible(false);
+        }
         posts =new ArrayList<Post>();
         dbReference.child("Sub").child("Soccer").addValueEventListener(new ValueEventListener() {
             @Override

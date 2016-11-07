@@ -34,17 +34,8 @@
         android:layout_height="wrap_content"
         android:text="Sign IN"
         android:id="@+id/signIn"
+        android:layout_marginTop="66dp"
         android:layout_below="@+id/userPassword"
-        android:layout_alignEnd="@+id/logo1"
-        android:layout_marginTop="61dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="SIGN IN"
-        android:id="@+id/logo1"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button

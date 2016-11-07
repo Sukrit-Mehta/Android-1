@@ -54,6 +54,10 @@ public class navigation extends AppCompatActivity
                    android.app.FragmentManager fragmentManager = getFragmentManager();
                    fragmentManager.beginTransaction().replace(R.id.content_frame,new CreatePost()).commit();
                }
+                else{
+                   PleaseLogin pleaseLogin = new PleaseLogin();
+                   pleaseLogin.show(getFragmentManager(),"Alert Dialog Fragment");
+               }
 
 
 
@@ -125,10 +129,15 @@ public class navigation extends AppCompatActivity
         } else if(id == R.id.search){
             fragmentManager.beginTransaction().add(R.id.content_frame,new SearchFragment(),"search").commit();
         } else if(id==R.id.signout){
+
             FirebaseAuth.getInstance().signOut();
             Menu nav_Menu = navigationView.getMenu();
-            nav_Menu.findItem(R.id.login).setVisible(true);
+            nav_Menu.findItem(R.id.login).setVisible(true);// set logout and login respectively
             nav_Menu.findItem(R.id.signout).setVisible(false);
+
+            TextView name = (TextView) findViewById(R.id.headText); // remove menu name
+            name.setText("");
+
             fragmentManager.beginTransaction().add(R.id.content_frame,new LogIn()).commit();
         }
 

@@ -2,10 +2,12 @@ package com.example.david.dpsproject;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ public class LogIn extends Fragment implements View.OnClickListener {
     FirebaseAuth.AuthStateListener authStateListener;
     EditText userName;
     EditText userPassword;
+    ProgressDialog pDialog;
 
 
     @Nullable
@@ -44,6 +47,9 @@ public class LogIn extends Fragment implements View.OnClickListener {
         authentication= FirebaseAuth.getInstance(); // get instance of my firebase console
         dbReference = FirebaseDatabase.getInstance().getReference(); // access to database
         FirebaseUser firebaseUser = authentication.getCurrentUser();
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.compose);
+        if(fab!=null)fab.hide(); // hide it in the create post area
 
         userName = (EditText)myView.findViewById(R.id.userName);
         userPassword = (EditText) myView.findViewById(R.id.userPassword);
@@ -56,11 +62,25 @@ public class LogIn extends Fragment implements View.OnClickListener {
 
         return myView;
     }
+    public void ShowProgressDialog() { // progress
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(getContext());
+            pDialog.setMessage("Signing In");
+            pDialog.setIndeterminate(true);
+        }
+        pDialog.show();
+    }
+    public void HideProgressDialog() {
+        if(pDialog!=null && pDialog.isShowing()){
+            pDialog.dismiss();
+        }
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.signIn:
+                ShowProgressDialog();
                 Login(userName.getText().toString(), userPassword.getText().toString());
                 break;
             case R.id.signup:
@@ -73,7 +93,7 @@ public class LogIn extends Fragment implements View.OnClickListener {
         authentication.signInWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                // HideProgressDialog();
+                 HideProgressDialog();
                 if(!(task.isSuccessful())){
                     Toast.makeText(getContext(),"authentication failed",Toast.LENGTH_SHORT).show();
                 }
