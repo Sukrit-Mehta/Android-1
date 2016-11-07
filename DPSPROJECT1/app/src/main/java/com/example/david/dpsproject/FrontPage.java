@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -43,15 +45,20 @@ public class FrontPage extends Fragment {
     Bundle bundle;
     FloatingActionButton fab;
     NavigationView navigationView;
+    FirebaseAuth.AuthStateListener authStateListener;
     String Uid;
 
     @Override
     public void onStart() {
         super.onStart();
-        if(bundle!=null) {
-            Uid= bundle.getString("UID");
+        FirebaseUser firebaseUser = authentication.getCurrentUser();
 
-            dbReference.child("Users").child(Uid).addValueEventListener(new ValueEventListener() {
+        NavigationView navigationView = (NavigationView)getActivity().findViewById(R.id.nav_view);
+        if(firebaseUser!=null){ // find if user is logged in set the title and replace sign in with logout
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.login).setVisible(false);
+            nav_Menu.findItem(R.id.signout).setVisible(true);
+            dbReference.child("Users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     try {
@@ -69,6 +76,12 @@ public class FrontPage extends Fragment {
                 }
             });
         }
+        authStateListener = new FirebaseAuth.AuthStateListener(){
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                // FirebaseUser
+            }
+        };
         posts =new ArrayList<Post>();
         dbReference.child("Sub").child("Soccer").addValueEventListener(new ValueEventListener() {
             @Override

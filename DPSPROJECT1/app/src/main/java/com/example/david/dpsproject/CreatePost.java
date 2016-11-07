@@ -78,20 +78,21 @@ public class CreatePost extends Fragment implements View.OnClickListener{
                         SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
                         Post post = new Post(preferences.getString("UID",""),title.getText().toString(),desc.getText().toString());
                         if (dataSnapshot.getValue() != null) {
+
                             DatabaseReference postref=dbReference.child("Sub").child(sub_cat).child("posts").push();
                             postref.setValue(post);
                             FrontPage frontPage = new FrontPage();
+
                             FragmentManager fragmentManager = getActivity().getFragmentManager();
                             fragmentManager.beginTransaction().replace(R.id.content_frame, frontPage).commit();
 
                         } else {
                             Sub sub = new Sub();
                             sub.pushPost(post);
-                           // Map<String,Sub> subMap = new HashMap<String, Sub>();
-                         //   subMap.put(sub_cat,sub);
-                           // DatabaseReference subRef=
+
                             dbReference.child("Sub").child(sub_cat).setValue(sub);
                             FrontPage frontPage = new FrontPage();
+
                             FragmentManager fragmentManager = getActivity().getFragmentManager();
                             fragmentManager.beginTransaction().replace(R.id.content_frame, frontPage).commit();
                            // subRef.setValue(subMap);

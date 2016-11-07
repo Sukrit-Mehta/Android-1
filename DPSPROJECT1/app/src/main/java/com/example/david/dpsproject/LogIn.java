@@ -45,24 +45,12 @@ public class LogIn extends Fragment implements View.OnClickListener {
         dbReference = FirebaseDatabase.getInstance().getReference(); // access to database
         FirebaseUser firebaseUser = authentication.getCurrentUser();
 
-              /*  if(firebaseUser!=null){
-            Intent front_page = new Intent(getApplicationContext(),FrontPage.class);
-            front_page.putExtra("userId",firebaseUser.getUid().toString());
-            startActivity(front_page);
-            finish();
-        }
-        authStateListener = new FirebaseAuth.AuthStateListener(){
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-               // FirebaseUser
-            }
-        };*/
-
-
         userName = (EditText)myView.findViewById(R.id.userName);
         userPassword = (EditText) myView.findViewById(R.id.userPassword);
         Button b = (Button) myView.findViewById(R.id.signIn);
         b.setOnClickListener(this);
+        Button signup = (Button)myView.findViewById(R.id.signup);
+        signup.setOnClickListener(this);
 
 
 
@@ -71,7 +59,15 @@ public class LogIn extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Login(userName.getText().toString(),userPassword.getText().toString());
+        switch (v.getId()) {
+            case R.id.signIn:
+                Login(userName.getText().toString(), userPassword.getText().toString());
+                break;
+            case R.id.signup:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new SignUp()).commit();
+                break;
+        }
+
     }
     protected void Login(final String email, final String password){
         authentication.signInWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
