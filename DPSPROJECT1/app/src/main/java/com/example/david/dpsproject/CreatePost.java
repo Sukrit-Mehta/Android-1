@@ -58,6 +58,7 @@ public class CreatePost extends Fragment implements View.OnClickListener{
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.search).setVisible(false);
 
+
         post_button.setOnClickListener(this);
 
 
@@ -88,11 +89,18 @@ public class CreatePost extends Fragment implements View.OnClickListener{
 
                         } else {
                             Sub sub = new Sub();
-                            sub.pushPost(post);
 
+                            Post first_post = new Post("ADMIN","FIRST POST OF THE SUB",""); // first one
+
+                            sub.pushPost(first_post);
                             dbReference.child("Sub").child(sub_cat).setValue(sub);
-                            FrontPage frontPage = new FrontPage();
 
+                            DatabaseReference postref=dbReference.child("Sub").child(sub_cat).child("posts").push();
+                            postref.setValue(post);
+
+                            dbReference.child("Sub").child(sub_cat).child("posts").child("0").removeValue(); // remove inital commit
+
+                            FrontPage frontPage = new FrontPage();
                             FragmentManager fragmentManager = getActivity().getFragmentManager();
                             fragmentManager.beginTransaction().replace(R.id.content_frame, frontPage).commit();
                            // subRef.setValue(subMap);

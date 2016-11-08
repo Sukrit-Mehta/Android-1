@@ -48,11 +48,6 @@
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/PostDesc"
-        android:layout_marginTop="62dp"
         android:layout_below="@+id/PostTitle"
-        android:layout_alignLeft="@+id/yes"
-        android:layout_alignStart="@+id/yes"
-        android:layout_above="@+id/yes"
-        android:layout_alignRight="@+id/no"
-        android:layout_alignEnd="@+id/no" />
+        android:layout_toEndOf="@+id/yes" />
 </RelativeLayout>

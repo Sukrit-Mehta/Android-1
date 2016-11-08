@@ -82,7 +82,7 @@ public class FrontPage extends Fragment {
             nav_Menu.findItem(R.id.signout).setVisible(false);
         }
         posts =new ArrayList<Post>();
-        dbReference.child("Sub").child("Soccer").addValueEventListener(new ValueEventListener() {
+        dbReference.child("Sub").child("Soccer").child("posts").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 posts.clear();
